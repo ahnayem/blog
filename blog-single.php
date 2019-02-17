@@ -1,5 +1,6 @@
-<?php  
-	include 'app/post-view-count.php';
+<?php
+	session_start();  
+	include 'app/post-view-count';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -48,10 +49,10 @@
 					<a href="#">Blog</a>
 					<ul class="list">
 						<li>
-							<a href="blog.php">Blog</a>
+							<a href="blog">Blog</a>
 						</li>
 						<li>
-							<a href="single-blog.php">Blog Details</a>
+							<a href="single-blog">Blog Details</a>
 						</li>
 					</ul>
 				</li>
@@ -89,11 +90,12 @@
 			<div class="row">
 				<div class="col-lg-8 posts-list">
 					<?php 
-					include 'db/db.php';
+					include 'db/db';
 
 					if (isset($_GET['id'])) {
 
 					$id = $_GET['id'];
+					$_SESSION["Pid"] = $id;
 					
 					$query = "SELECT * FROM blog_post WHERE id='$id'";
 
@@ -106,10 +108,9 @@
 					$row = $stmt->fetch();
 
 							$id = $row['id'];
-							$author_name = $row['author'];
+							$author_name = $row['author_name'];
 							$title = $row['title'];
 							$description = $row['description'];
-							$author = $row['author'];
 							$tag = $row['tag'];
 							$image = $row['photo'];
 							$time = date('jS M, Y', strtotime($row['date'])); ?>
@@ -124,7 +125,7 @@
 								<li><a href="#"><?php echo $tag; ?></a></li>
 							</ul>
 							<div class="user-details row">
-								<p class="user-name col-lg-12 col-md-12 col-6"><a href="#"><?php echo $author; ?></a> <span class="lnr lnr-user"></span></p>
+								<p class="user-name col-lg-12 col-md-12 col-6"><a href="#"><?php echo $author_name; ?></a> <span class="lnr lnr-user"></span></p>
 								<p class="date col-lg-12 col-md-12 col-6"><a href="#"><?php echo $time; ?></a> <span class="lnr lnr-calendar-full"></span></p>
 								<p class="view col-lg-12 col-md-12 col-6"><a href="#"><?php echo $view; ?></a> <span class="lnr lnr-eye"></span></p>
 								<p class="comments col-lg-12 col-md-12 col-6"><a href="#">06 Comments</a> <span class="lnr lnr-bubble"></span></p>
@@ -167,8 +168,21 @@
 							</div>
 						</div>
 					</div>
+
+										
+					<?php include 'app/view-comment'; ?>
+
 					<div class="comments-area">
-						<h4 class="text-white">05 Comments</h4>
+						<h4 class="text-white"><?php echo $total_comment; ?>Comment<?php if ($total_comment>1){echo 's';}?></h4>
+
+							<?php 
+							$Pid = $_GET['id'];
+
+							$query = "SELECT * FROM blog_comment WHERE post_id='$Pid' ORDER BY id DESC";
+							$stmt 	  = $db->prepare($query);
+							$result   = $stmt->execute();
+
+							while ($row = $stmt->fetch()) { ?>
 						<div class="comment-list">
 							<div class="single-comment justify-content-between d-flex">
 								<div class="user justify-content-between d-flex">
@@ -176,18 +190,26 @@
 										<img src="img/blog/c1.jpg" alt="">
 									</div>
 									<div class="desc">
-										<h5><a href="#">Emilly Blunt</a></h5>
-										<p class="date">December 4, 2017 at 3:12 pm </p>
-										<p class="comment">
-											Never say goodbye till the end comes!
-										</p>
+										<h5><a href="#"><?php echo $row['author_name']; ?></a></h5>
+										<p class="date"><?php echo date('jS M, Y', strtotime($row['date']));?></p>
+										<p class="comment"><?php echo $row['comment'];?></p>
 									</div>
 								</div>
 								<div class="reply-btn">
-									<a href="" class="btn-reply text-uppercase">reply</a>
+									<button type="button" class="btn" <?php $Cid = $row['id']; ?> data-toggle="modal" data-target="#reply">
+									  REPLY
+									</button>
 								</div>
 							</div>
 						</div>
+
+							<?php $query_reply = "SELECT * FROM blog_reply WHERE post_id='$Pid' AND comment_id='$Cid' ORDER BY id DESC";
+
+								$stmt_reply 	  = $db->prepare($query_reply);
+								$result_reply   = $stmt_reply->execute();
+
+								while ($row_reply = $stmt_reply->fetch()) { ?>
+
 						<div class="comment-list left-padding">
 							<div class="single-comment justify-content-between d-flex">
 								<div class="user justify-content-between d-flex">
@@ -195,76 +217,16 @@
 										<img src="img/blog/c2.jpg" alt="">
 									</div>
 									<div class="desc">
-										<h5><a href="#">Elsie Cunningham</a></h5>
-										<p class="date">December 4, 2017 at 3:12 pm </p>
-										<p class="comment">
-											Never say goodbye till the end comes!
-										</p>
+										<h5><a href="#"><?php echo $row_reply['author_name'];?></a></h5>
+										<p class="date"><?php echo date('jS M, Y g:i a', strtotime($row_reply['date_reply']));?></p>
+										<p class="comment"><?php echo $row_reply['reply'];?></p>
 									</div>
-								</div>
-								<div class="reply-btn">
-									<a href="" class="btn-reply text-uppercase">reply</a>
 								</div>
 							</div>
 						</div>
-						<div class="comment-list left-padding">
-							<div class="single-comment justify-content-between d-flex">
-								<div class="user justify-content-between d-flex">
-									<div class="thumb">
-										<img src="img/blog/c3.jpg" alt="">
-									</div>
-									<div class="desc">
-										<h5><a href="#">Annie Stephens</a></h5>
-										<p class="date">December 4, 2017 at 3:12 pm </p>
-										<p class="comment">
-											Never say goodbye till the end comes!
-										</p>
-									</div>
-								</div>
-								<div class="reply-btn">
-									<a href="" class="btn-reply text-uppercase">reply</a>
-								</div>
-							</div>
-						</div>
-						<div class="comment-list">
-							<div class="single-comment justify-content-between d-flex">
-								<div class="user justify-content-between d-flex">
-									<div class="thumb">
-										<img src="img/blog/c4.jpg" alt="">
-									</div>
-									<div class="desc">
-										<h5><a href="#">Maria Luna</a></h5>
-										<p class="date">December 4, 2017 at 3:12 pm </p>
-										<p class="comment">
-											Never say goodbye till the end comes!
-										</p>
-									</div>
-								</div>
-								<div class="reply-btn">
-									<a href="" class="btn-reply text-uppercase">reply</a>
-								</div>
-							</div>
-						</div>
-						<div class="comment-list">
-							<div class="single-comment justify-content-between d-flex">
-								<div class="user justify-content-between d-flex">
-									<div class="thumb">
-										<img src="img/blog/c5.jpg" alt="">
-									</div>
-									<div class="desc">
-										<h5><a href="#">Ina Hayes</a></h5>
-										<p class="date">December 4, 2017 at 3:12 pm </p>
-										<p class="comment">
-											Never say goodbye till the end comes!
-										</p>
-									</div>
-								</div>
-								<div class="reply-btn">
-									<a href="" class="btn-reply text-uppercase">reply</a>
-								</div>
-							</div>
-						</div>
+						<?php }} ?>
 					</div>
+					
 					<div class="comment-form">
 						<h4 class="text-white">Leave a Comment</h4>
 						<form>
@@ -444,6 +406,7 @@
 						</div>
 					</div>
 				</div>
+				</div>
 			</div>
 		</div>
 	</section>
@@ -554,3 +517,35 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 </body>
 
 </html>
+
+
+<!--start reply modal-->
+<div class="modal fade" id="reply" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Reply as</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form action="app/post-reply?pid=<?php echo $Pid; ?>&cid=<?php echo $Cid; ?>" method="post">
+        	<div class="form-group">
+			    <input type="text" class="form-control" name="Name" id="Name" placeholder="Your Name">
+			</div>
+			<div class="form-group">
+				<textarea class="form-control" id="reply" name="reply" rows="3" placeholder="Your Reply..."></textarea>
+			</div>
+			<div class="modal-footer">
+        <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" name="submit" class="btn btn-primary">REPLY</button>
+      </div>
+		</form>
+      </div>
+      
+    </div>
+  </div>
+</div>
+	<!-- //end reply modal-->

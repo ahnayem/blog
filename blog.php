@@ -45,10 +45,10 @@
 					<a href="#">Blog</a>
 					<ul class="list">
 						<li>
-							<a href="blog.php">Blog</a>
+							<a href="blog">Blog</a>
 						</li>
 						<li>
-							<a href="blog-single.php">Blog Details</a>
+							<a href="blog-single">Blog Details</a>
 						</li>
 					</ul>
 				</li>
@@ -99,10 +99,10 @@
 						while ($row = $stmt->fetch()) {
 
 							$id = $row['id'];
-							$author_name = $row['author'];
+							$author_name = $row['author_name'];
 							$title = $row['title'];
 							$description = $row['description'];
-							$author = $row['author'];
+							$author = $row['author_name'];
 							$tag = $row['tag'];
 							$image = $row['photo'];
 							$view = $row['view'];
@@ -116,7 +116,7 @@
 							</ul>
 							<div class="user-details row">
 								<p class="user-name col-lg-12 col-md-12 col-6"><a href="#">
-									<?php echo $author; ?></a> <span class="lnr lnr-user"></span></p>
+									<?php echo $author_name; ?></a> <span class="lnr lnr-user"></span></p>
 								<p class="date col-lg-12 col-md-12 col-6"><a href="#">
 									<?php echo $time; ?></a> <span class="lnr lnr-calendar-full"></span></p>
 								<p class="view col-lg-12 col-md-12 col-6"><a href="#">
@@ -128,11 +128,11 @@
 							<div class="feature-img">
 								<img class="img-fluid" src="uploads/<?php echo $image; ?>" alt="">
 							</div>
-							<a class="posts-title" href="blog-single.php?id=<?php echo $id; ?>"><h3><?php echo $title; ?></h3></a>
+							<a class="posts-title" href="blog-single?id=<?php echo $id; ?>"><h3><?php echo $title; ?></h3></a>
 							<p class="excert">
 								<?php echo substr($description,0,300); ?>
 							</p>
-							<a href="blog-single.php?id=<?php echo $id; ?>" class="primary-btn">View More</a>
+							<a href="blog-single?id=<?php echo $id; ?>" class="primary-btn">View More</a>
 						</div>
 					</div>
 

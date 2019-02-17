@@ -22,12 +22,13 @@
 	$move = move_uploaded_file($tmp_file, $target_dir.$newfilename);
 
 
-	$query 	  = "INSERT INTO blog_post(title, description, author, tag, photo) 
-								VALUES(:title, :description, :author, :tag, :photo)";
+	$query 	  = "INSERT INTO blog_post(title, description, author_name, author_id, tag, photo) 
+								VALUES(:title, :description, :author_name, :tag, :photo)";
 	$stmt 	  = $db->prepare($query);
     $stmt     -> bindValue(':title',$title,PDO::PARAM_STR);
     $stmt     -> bindValue(':description',$description,PDO::PARAM_STR);
-    $stmt     -> bindValue(':author',$author,PDO::PARAM_STR);
+    $stmt     -> bindValue(':author_name',$author,PDO::PARAM_STR);
+    $stmt     -> bindValue(':author_id',10,PDO::PARAM_INT);
     $stmt     -> bindValue(':tag',$tag,PDO::PARAM_STR);
     $stmt     -> bindValue(':photo',$newfilename,PDO::PARAM_STR);
 	$result   = $stmt->execute();

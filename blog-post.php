@@ -1,5 +1,3 @@
-<?php if(isset($_POST['submit'])){include 'app/post-insert.php';} ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -1178,7 +1178,7 @@ button {
     font-size: 13px;
     color: #cccccc; }
   .comments-area .comment {
-    color: #777777; }
+    color: #fff; }
   .comments-area .btn-reply {
     background-color: transparent;
     color: #fff;
@@ -1221,7 +1221,7 @@ button {
     border-radius: 0px;
     width: 100%;
     font-size: 13px;
-    color: #777777; }
+    color: #fff; }
     .comment-form .form-control:focus {
       box-shadow: none;
       border: 1px solid #fff; }
@@ -2221,3 +2221,15 @@ h6 {
     border-top: 1px solid #333333; }
 
 /*# sourceMappingURL=style.css.map */
+
+.btn-secondary {
+    color: #fff!important;
+    background-color: #6c757d!important;
+    border-color: #6c757d!important;
+}
+
+.btn-primary {
+    color: #fff!important;
+    background-color: #f9cc41!important;
+    border-color: #f9cc41!important;
+}
